@@ -184,5 +184,3 @@ matrix conv_to_perc(std::vector<matrix> conv_out) {
     return matrix(ans);
 }
 
-
-
