@@ -70,7 +70,11 @@ class NN
             return ans;
         }
 
-
+        /**Находит ошибку между значениями векторов.
+        * @param rgb - матрица 1*n из изображения. 
+        * @param ans - номер класса, к которому относится объект
+        * @learning_rate - скорость обучения.
+        */
         void learn(matrix rgb, int ans, float learning_rate) {
             matrix target_output;
             target_output.set_size(1, 10);
@@ -92,11 +96,18 @@ class NN
             }
         }  
 
+        /** Размер сети
+        * @return - количество слоев перцептрона
+        */
         int get_size() 
         {
             return number_of_layers_prc;
         }
 
+        /** возвращает готовый к печати слой.
+        * @param index - индекс слоя, который нужно напечатать
+        * @return - готовый слой
+        */
         std::vector<std::vector<float>> ready_to_print_layer(int index) 
         {
             std::vector<std::vector<float>> ans(prc[index].get_size_x(), std::vector<float>(prc[index].get_size_y()));
@@ -108,7 +119,9 @@ class NN
             }
             return ans;
         }
-
+        /** загружает сеть из файла
+        * @param filename - имя файла
+        */
         void load(std::string filename) 
         {
             std::ifstream in;
@@ -139,6 +152,10 @@ class NN
         std::vector<perceptronLayer> prc;
 };
 
+/** Сохраняет нейросеть в файл
+* @param index - индекс слоя, который нужно напечатать
+* @return - готовый слой
+*/
 
 void save_NN(NN to_save, std::string filename) 
 {

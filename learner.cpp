@@ -3,7 +3,10 @@
 #include <string>
 #include "nn/network.cpp"
 
-
+/** возвращает готовый к печати слой.
+* @param index - индекс слоя, который нужно напечатать
+* @return - готовый слой
+*/
 int reverseInt (int i)
 {
     unsigned char c1, c2, c3, c4;
