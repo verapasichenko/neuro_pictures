@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libprc.a CMakeFiles/prc.dir/nn/perceptron.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libprc.a

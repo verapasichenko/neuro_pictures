@@ -1,0 +1,26 @@
+\doxysection{GPU\+\_\+stuff/detect\+\_\+device.cpp File Reference}
+\hypertarget{detect__device_8cpp}{}\label{detect__device_8cpp}\index{GPU\_stuff/detect\_device.cpp@{GPU\_stuff/detect\_device.cpp}}
+{\ttfamily \#include $<$cuda\+\_\+runtime.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{detect__device_8cpp_a545806e08bde8cb53d5d4f87599c8498}{is\+\_\+cuda}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{detect__device_8cpp_a545806e08bde8cb53d5d4f87599c8498}\label{detect__device_8cpp_a545806e08bde8cb53d5d4f87599c8498} 
+\index{detect\_device.cpp@{detect\_device.cpp}!is\_cuda@{is\_cuda}}
+\index{is\_cuda@{is\_cuda}!detect\_device.cpp@{detect\_device.cpp}}
+\doxysubsubsection{\texorpdfstring{is\_cuda()}{is\_cuda()}}
+{\footnotesize\ttfamily bool is\+\_\+cuda (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keywordtype}{int}\ deviceCount;}
+\DoxyCodeLine{00006\ \ \ \ \ cudaGetDeviceCount(\&deviceCount);}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keywordflow}{return}\ deviceCount;}
+\DoxyCodeLine{00008\ \}}
+
+\end{DoxyCode}

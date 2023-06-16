@@ -1,0 +1,152 @@
+\doxysection{network.\+cpp}
+\hypertarget{network_8cpp_source}{}\label{network_8cpp_source}\index{nn/network.cpp@{nn/network.cpp}}
+\mbox{\hyperlink{network_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{perceptron_8cpp}{perceptron.cpp}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{utility_8cpp}{utility.cpp}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00013\ \mbox{\hyperlink{classmatrix}{matrix}}\ \mbox{\hyperlink{network_8cpp_a5192468b43cd5d282c19337d04935386}{calculate\_error}}(\mbox{\hyperlink{classmatrix}{matrix}}\ output\_res,\ \mbox{\hyperlink{classmatrix}{matrix}}\ result)}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ err;}
+\DoxyCodeLine{00016\ \ \ \ \ err.set\_size(1,\ output\_res.get\_size\_y());}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ result.get\_size\_y();\ ++i)}
+\DoxyCodeLine{00018\ \ \ \ \ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ err.set(0,\ i,\ (result.get(0,\ i)\ -\/\ output\_res.get(0,\ i))\ *\ (result.get(0,\ i)\ -\/\ output\_res.get(0,\ i)));}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordflow}{return}\ err;}
+\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_n_n}{NN}}\ }
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_n_n_a7e7569b68590876187363472be96d5c2}{NN}}(\textcolor{keywordtype}{int}\ numberOfLayersP\_,\ std::vector<int>\ p\_sizes,\ \textcolor{keywordtype}{int}\ first\_in)\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ number\_of\_layers\_prc\ =\ numberOfLayersP\_;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ prc.resize(number\_of\_layers\_prc);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ number\_of\_layers\_prc;\ ++i)\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(i\ !=\ 0)\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prc[i].set(p\_sizes[i\ -\/\ 1],\ p\_sizes[i]);}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prc[i].set(first\_in,\ p\_sizes[i]);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_n_n_a6fffcefb426ae6af3d91203f9a2c67b0}{recognize}}(\mbox{\hyperlink{classmatrix}{matrix}}\ rgb)\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ now\ =\ rgb;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ prc.size();\ ++i)\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ now\ =\ prc[i].predict(now);}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ans\ =\ 0;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 10;\ ++i)\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(now.get(0,\ i)\ >\ now.get(0,\ ans))\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ans\ =\ i;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ans;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_n_n_a9a49a3813996e079f919c8087a669e9d}{learn}}(\mbox{\hyperlink{classmatrix}{matrix}}\ rgb,\ \textcolor{keywordtype}{int}\ ans,\ \textcolor{keywordtype}{float}\ learning\_rate)\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ target\_output;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ target\_output.set\_size(1,\ 10);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ target\_output.set(0,\ ans,\ 1);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ in\ =\ rgb;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ prc.size();\ ++i)\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ =\ prc[i].predict(in);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ err\ =\ \mbox{\hyperlink{network_8cpp_a5192468b43cd5d282c19337d04935386}{calculate\_error}}(in,\ target\_output);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ prc.size()\ -\/\ 1;\ i\ >\ 0;\ -\/-\/i)}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prc[i].update\_weights(err,\ 0.1);}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ err\ =\ prc[i].calculate\_hidden\_error(err,\ prc[i\ -\/\ 1].get\_weights());}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \}\ \ }
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_n_n_abb8d4b6a51ac4a4694e56e3e06925286}{get\_size}}()\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ number\_of\_layers\_prc;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::vector<std::vector<float>>\ \mbox{\hyperlink{class_n_n_a5e1056997df10aeb56cdd4d7315ad65b}{ready\_to\_print\_layer}}(\textcolor{keywordtype}{int}\ index)\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::vector<float>>\ ans(prc[index].\mbox{\hyperlink{utility_8cpp_a1f7ca711f58d7084a418a4ae79a3448f}{get\_size\_x}}(),\ std::vector<float>(prc[index].\mbox{\hyperlink{utility_8cpp_ae80e948a751214a16df1a20ddb37be9d}{get\_size\_y}}()));}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ weights\ =\ prc[index].get\_weights();}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ prc[index].get\_size\_x();\ ++i)\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ prc[index].get\_size\_y();\ ++j)\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ans[i][j]\ =\ weights.get(i,\ j);}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ans;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_n_n_ab0d4871faf352dd2f12595999bc6f89f}{load}}(std::string\ filename)\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ std::ifstream\ in;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ in.open(filename);}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ size;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ in\ >>\ size;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ prc.resize(size);}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ size;\ ++i)\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{utility_8cpp_aec1dee03c858e0d3910c40c209890ab0}{size\_x}},\ \mbox{\hyperlink{utility_8cpp_a22aeb82e7a98517be5f90c810e423af0}{size\_y}},\ value;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ >>\ \mbox{\hyperlink{utility_8cpp_aec1dee03c858e0d3910c40c209890ab0}{size\_x}}\ >>\ \mbox{\hyperlink{utility_8cpp_a22aeb82e7a98517be5f90c810e423af0}{size\_y}};}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ layer;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ layer.set\_size(\mbox{\hyperlink{utility_8cpp_aec1dee03c858e0d3910c40c209890ab0}{size\_x}},\ \mbox{\hyperlink{utility_8cpp_a22aeb82e7a98517be5f90c810e423af0}{size\_y}});}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ x\ =\ 0;\ x\ <\ \mbox{\hyperlink{utility_8cpp_aec1dee03c858e0d3910c40c209890ab0}{size\_x}};\ ++x)\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ y\ =\ 0;\ y\ <\ \mbox{\hyperlink{utility_8cpp_a22aeb82e7a98517be5f90c810e423af0}{size\_y}};\ ++y)\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ >>\ value;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ layer.set(x,\ y,\ \mbox{\hyperlink{utility_8cpp_aec1dee03c858e0d3910c40c209890ab0}{size\_x}});}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prc[i].set\_values(layer);}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ number\_of\_layers\_prc;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ learning\_rate;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ std::vector<perceptronLayer>\ prc;}
+\DoxyCodeLine{00153\ \};}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00160\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{network_8cpp_a7280506718a3f756efa65e69f3e6a9a0}{save\_NN}}(\mbox{\hyperlink{class_n_n}{NN}}\ to\_save,\ std::string\ filename)\ }
+\DoxyCodeLine{00161\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ std::ofstream\ out;}
+\DoxyCodeLine{00163\ \ \ \ \ out.open(filename);}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{int}\ size\ =\ to\_save.\mbox{\hyperlink{class_n_n_abb8d4b6a51ac4a4694e56e3e06925286}{get\_size}}();}
+\DoxyCodeLine{00165\ \ \ \ \ out\ <<\ size;}
+\DoxyCodeLine{00166\ \ \ \ \ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ size;\ ++i)\ }
+\DoxyCodeLine{00168\ \ \ \ \ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ std::vector<std::vector<float>>\ weights\ =\ to\_save.\mbox{\hyperlink{class_n_n_a5e1056997df10aeb56cdd4d7315ad65b}{ready\_to\_print\_layer}}(i);}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ out\ <<\ weights.size()\ <<\ \textcolor{charliteral}{'\ '}\ <<\ weights[0].size();}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ weights.size();\ ++i)\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ weights[i].size();\ ++j)\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out\ <<\ weights[i][j]\ <<\ \textcolor{charliteral}{'\ '};}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ out\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ out.close();}
+\DoxyCodeLine{00180\ \ \ \ \ \}}
+\DoxyCodeLine{00181\ \}}
+
+\end{DoxyCode}

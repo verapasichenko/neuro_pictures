@@ -1,0 +1,14 @@
+\doxysection{detect\+\_\+device.\+cpp}
+\hypertarget{detect__device_8cpp_source}{}\label{detect__device_8cpp_source}\index{GPU\_stuff/detect\_device.cpp@{GPU\_stuff/detect\_device.cpp}}
+\mbox{\hyperlink{detect__device_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{detect__device_8cpp_a545806e08bde8cb53d5d4f87599c8498}{is\_cuda}}()\ \{}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keywordtype}{int}\ deviceCount;}
+\DoxyCodeLine{00006\ \ \ \ \ cudaGetDeviceCount(\&deviceCount);}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keywordflow}{return}\ deviceCount;}
+\DoxyCodeLine{00008\ \}}
+
+\end{DoxyCode}

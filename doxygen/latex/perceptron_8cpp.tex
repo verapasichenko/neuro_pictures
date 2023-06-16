@@ -1,0 +1,62 @@
+\doxysection{nn/perceptron.cpp File Reference}
+\hypertarget{perceptron_8cpp}{}\label{perceptron_8cpp}\index{nn/perceptron.cpp@{nn/perceptron.cpp}}
+{\ttfamily \#include \"{}utility.\+cpp\"{}}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$random$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classperceptron_layer}{perceptron\+Layer}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{perceptron_8cpp_a2dcda4f92de9e3e4a45551fc8773631b}{calculate\+\_\+grad}} (float x)
+\item 
+float \mbox{\hyperlink{perceptron_8cpp_aecdc6dd5c4e0f8f14c373f614618d4a1}{activation\+\_\+funct}} (float x)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{perceptron_8cpp_aecdc6dd5c4e0f8f14c373f614618d4a1}\label{perceptron_8cpp_aecdc6dd5c4e0f8f14c373f614618d4a1} 
+\index{perceptron.cpp@{perceptron.cpp}!activation\_funct@{activation\_funct}}
+\index{activation\_funct@{activation\_funct}!perceptron.cpp@{perceptron.cpp}}
+\doxysubsubsection{\texorpdfstring{activation\_funct()}{activation\_funct()}}
+{\footnotesize\ttfamily float activation\+\_\+funct (\begin{DoxyParamCaption}\item[{float}]{x }\end{DoxyParamCaption})}
+
+Подсчет функции активации. 
+\begin{DoxyParams}{Parameters}
+{\em x} & -\/ точка. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+значение функции активации в точке. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00021\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ /\ (1.0\ +\ exp(-\/x)));}
+\DoxyCodeLine{00023\ \}}
+
+\end{DoxyCode}
+\Hypertarget{perceptron_8cpp_a2dcda4f92de9e3e4a45551fc8773631b}\label{perceptron_8cpp_a2dcda4f92de9e3e4a45551fc8773631b} 
+\index{perceptron.cpp@{perceptron.cpp}!calculate\_grad@{calculate\_grad}}
+\index{calculate\_grad@{calculate\_grad}!perceptron.cpp@{perceptron.cpp}}
+\doxysubsubsection{\texorpdfstring{calculate\_grad()}{calculate\_grad()}}
+{\footnotesize\ttfamily float calculate\+\_\+grad (\begin{DoxyParamCaption}\item[{float}]{x }\end{DoxyParamCaption})}
+
+Подсчет градиента. 
+\begin{DoxyParams}{Parameters}
+{\em x} & -\/ точка \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+значение производной в точке 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordflow}{return}\ x\ *\ (1\ -\/\ x);}
+\DoxyCodeLine{00014\ \}}
+
+\end{DoxyCode}

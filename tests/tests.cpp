@@ -12,6 +12,8 @@ TEST_CASE("Проверка общей функциональности матр
     CHECK(m1 == m2);
     matrix m3(std::vector<std::vector<float>> {{3, 1},{2, 1}});
     CHECK(m3 != m2);
+    CHECK_NOT_EQ(m3 == m1);
+    CHECK_NOT_EQ(m3 == m2);
 
     m1.set(0, 0, 3); 
     CHECK(m1 == m3);

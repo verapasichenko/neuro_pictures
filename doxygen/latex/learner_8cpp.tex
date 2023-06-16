@@ -1,0 +1,104 @@
+\doxysection{learner.\+cpp File Reference}
+\hypertarget{learner_8cpp}{}\label{learner_8cpp}\index{learner.cpp@{learner.cpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include \"{}nn/network.\+cpp\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a}{reverse\+Int}} (int i)
+\item 
+int \mbox{\hyperlink{learner_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{learner_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{learner_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+\index{learner.cpp@{learner.cpp}!main@{main}}
+\index{main@{main}!learner.cpp@{learner.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ std::string\ dataset\_path,\ dataset\_ans\_path;}
+\DoxyCodeLine{00023\ \ \ \ \ std::cin\ >>\ dataset\_path\ >>\ dataset\_ans\_path;}
+\DoxyCodeLine{00024\ \ \ \ \ std::ifstream\ file,\ in;}
+\DoxyCodeLine{00025\ \ \ \ \ in.open(dataset\_ans\_path);}
+\DoxyCodeLine{00026\ \ \ \ \ file.open(dataset\_path);\ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{int}\ magic\_number=0;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ number\_of\_images=0;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_rows=0;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_cols=0;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{int}\ k;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ file.read((\textcolor{keywordtype}{char}*)\&magic\_number,\textcolor{keyword}{sizeof}(magic\_number));}
+\DoxyCodeLine{00034\ \ \ \ \ magic\_number=\ \mbox{\hyperlink{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a}{reverseInt}}(magic\_number);}
+\DoxyCodeLine{00035\ \ \ \ \ file.read((\textcolor{keywordtype}{char}*)\&number\_of\_images,\textcolor{keyword}{sizeof}(number\_of\_images));}
+\DoxyCodeLine{00036\ \ \ \ \ number\_of\_images=\ \mbox{\hyperlink{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a}{reverseInt}}(number\_of\_images);}
+\DoxyCodeLine{00037\ \ \ \ \ file.read((\textcolor{keywordtype}{char}*)\&n\_rows,\textcolor{keyword}{sizeof}(n\_rows));}
+\DoxyCodeLine{00038\ \ \ \ \ file.read((\textcolor{keywordtype}{char}*)\&n\_cols,\textcolor{keyword}{sizeof}(n\_cols));}
+\DoxyCodeLine{00039\ \ \ \ \ n\_rows\ =\ \mbox{\hyperlink{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a}{reverseInt}}(n\_rows);}
+\DoxyCodeLine{00040\ \ \ \ \ n\_cols=\ \mbox{\hyperlink{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a}{reverseInt}}(n\_cols);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{class_n_n}{NN}}\ recognizer(3,\ \{500,\ 20,\ 10\},\ n\_rows\ *\ n\_cols);\ }
+\DoxyCodeLine{00043\ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ ns\ =\ 0;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 8;\ ++i)\ }
+\DoxyCodeLine{00046\ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ in.read((\textcolor{keywordtype}{char}*)\&ns,\textcolor{keyword}{sizeof}(ns));}
+\DoxyCodeLine{00048\ \ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ number\_of\_images;\ ++i)}
+\DoxyCodeLine{00050\ \ \ \ \ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmatrix}{matrix}}\ image(std::vector<std::vector<float>>\ (1,\ std::vector<float>(n\_cols\ *\ n\_rows,\ 0)));}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ r\ =\ 0;\ r\ <\ n\_rows;\ ++r)}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ c\ =\ 0;\ c\ <\ n\_cols;\ ++c)}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ temp\ =\ 0;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file.read((\textcolor{keywordtype}{char}*)\&temp,\textcolor{keyword}{sizeof}(temp));}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ image.set(0,\ r\ *\ n\_rows\ +\ c,\ temp);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ ns\ =\ 0;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ in.read((\textcolor{keywordtype}{char}*)\&ns,\textcolor{keyword}{sizeof}(ns));}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ smth\ =\ ns;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ recognizer.learn(image,\ smth,\ 0.1);}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ std::cout\ <<\ smth\ <<\ \textcolor{charliteral}{'\ '}\ <<\ i\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(i\ \%\ 500\ ==\ 0)\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{network_8cpp_a7280506718a3f756efa65e69f3e6a9a0}{save\_NN}}(recognizer,\ \textcolor{stringliteral}{"{}network.txt"{}});}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ \}}
+
+\end{DoxyCode}
+\Hypertarget{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a}\label{learner_8cpp_ad05f6fa11b7d65f41c4e824ae531051a} 
+\index{learner.cpp@{learner.cpp}!reverseInt@{reverseInt}}
+\index{reverseInt@{reverseInt}!learner.cpp@{learner.cpp}}
+\doxysubsubsection{\texorpdfstring{reverseInt()}{reverseInt()}}
+{\footnotesize\ttfamily int reverse\+Int (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+возвращает готовый к печати слой. 
+\begin{DoxyParams}{Parameters}
+{\em index} & -\/ индекс слоя, который нужно напечатать \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/ готовый слой 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ c1,\ c2,\ c3,\ c4;}
+\DoxyCodeLine{00013\ \ \ \ \ c1\ =\ i\ \&\ 255;}
+\DoxyCodeLine{00014\ \ \ \ \ c2\ =\ (i\ >>\ 8)\ \&\ 255;}
+\DoxyCodeLine{00015\ \ \ \ \ c3\ =\ (i\ >>\ 16)\ \&\ 255;}
+\DoxyCodeLine{00016\ \ \ \ \ c4\ =\ (i\ >>\ 24)\ \&\ 255;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordflow}{return}\ ((\textcolor{keywordtype}{int})c1\ <<\ 24)\ +\ ((\textcolor{keywordtype}{int})c2\ <<\ 16)\ +\ ((\textcolor{keywordtype}{int})c3\ <<\ 8)\ +\ c4;}
+\DoxyCodeLine{00018\ \}}
+
+\end{DoxyCode}

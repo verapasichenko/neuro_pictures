@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include "../GPU_stuff/matrix_mul.cpp"
+#include "../GPU_stuff/matrix_mul.cu"
 #include "../GPU_stuff/detect_device.cpp"
 #pragma once
 
@@ -16,7 +16,7 @@ class matrix
 {
 
     public:
-        matrix(std::vector<std::vector<float>> data_) {
+        matrix(std::vector<std::vector<float>> data_)//конструктор {
             data = data_;
             size_x = data.size();
             size_y = data[0].size();
@@ -154,24 +154,5 @@ std::vector<int> calculate_gradient(std::vector<int> values){
 int max(int a, int b, int c, int d) 
 {
     return std::max(std::max(a, b), std::max(c, d)); 
-}
-
-
-
-/** конвертирует слои convolution в слои perceptron
-*  @param conv_out - то, что вышло из слоев свертки.
-*  @return matrix(ans) - матрица, которую нужно подать в перцептрон
-*/
-matrix conv_to_perc(std::vector<matrix> conv_out) {
-    std::vector<std::vector<float>> ans(0);
-
-    for(int i = 0; i < conv_out.size(); ++i) {
-        for(int j = 0; j < conv_out[i].get_size_x(); ++j) {
-            for(int k = 0; k < conv_out[i].get_size_y(); ++k) {
-                ans[0].push_back(conv_out[i].get(j, k));
-            }
-        }
-    }
-    return matrix(ans);
 }
 

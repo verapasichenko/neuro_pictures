@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libnn.a CMakeFiles/nn.dir/nn/network.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libnn.a

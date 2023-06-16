@@ -1,0 +1,6 @@
+/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles/utility.dir
+/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles/prc.dir
+/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles/nn.dir
+/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles/tests.dir
+/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles/edit_cache.dir
+/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles/rebuild_cache.dir
