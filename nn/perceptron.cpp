@@ -3,16 +3,28 @@
 #include <random>
 #pragma once
 
+
+/**Подсчет градиента.
+* @param x - точка
+* @return значение производной в точке
+*/
 float calculate_grad(float x) 
 {
     return x * (1 - x);
 }
 
+/**Подсчет функции активации.
+* @param x - точка.
+* @return значение функции активации в точке.
+*/
 float activation_funct(float x) 
 {
     return (1.0 / (1.0 + exp(-x)));
 }
 
+/**
+* Класс слоя перцептрона. Реализован с помощью матричного умножения.
+*/
 class perceptronLayer 
 {
     public:    
@@ -24,6 +36,10 @@ class perceptronLayer
             in = 0;
             out = 0;
         }
+        /**Заполнение случайными значениями перцептронного слоя
+        * @param in_ - размер входа в слой
+        * @param out_ - размер выхода из слоя
+        */
         void set(int in_, int out_) 
         {
             in = in_;
@@ -35,14 +51,19 @@ class perceptronLayer
                 }
             }
         }
-
+        /**Заполняет слой известными значениями
+        * @param values - значения
+        */
         void set_values(matrix values) 
         {
             in = values.get_size_x();
             out = values.get_size_y();
             weights = values;
         }
-        
+        /**Производит вычисления для слоя нейронов 
+        * @param data - значения на входе
+        * return значения на выходе из слоя
+        */
         matrix predict(matrix data) 
         {
             ans = data * weights;
@@ -51,7 +72,11 @@ class perceptronLayer
             }
             return ans;
         }
-
+        /**Производит вычисление скрытой ошибки.
+        * @param error - ошибки на следующем слое
+        * @param pweights - веса предыдущего слоя
+        * @return ошибка для передачи в предыдущий слой
+        */
         matrix calculate_hidden_error(matrix error, matrix pweights)
         {
             matrix hidden_error;
@@ -69,7 +94,10 @@ class perceptronLayer
             return hidden_error;
         }
         
-        
+        /**Производит обновление весов слоя с учетом ошибки
+        * @param error - ошибки со следующего слоя
+        * @param learning_rate - скорость обучения
+        */
         void update_weights(matrix error, float learning_rate)
         {
             for (int i = 0; i < in; ++i)

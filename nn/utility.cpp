@@ -4,6 +4,7 @@
 #include <string>
 #include "../GPU_stuff/matrix_mul.cpp"
 #include "../GPU_stuff/detect_device.cpp"
+#pragma once
 
 /**Класс матрицы.
 * size_x - размер матрицы по x
@@ -72,17 +73,6 @@ class matrix
             data.resize(x, std::vector<float>(y));
         }
 
-        /** прогон матрицы через функцию активации relu
-        */
-        void relu(){
-            for (int i = 0; i < size_x; ++i){
-                for (int j = 0; j < size_y; ++j){
-                    if (data[i][j] < 0){
-                        data[i][j] = 0;
-                    }
-                }
-            }
-        }
         bool operator ==(matrix &other) const {
             if(size_x != other.get_size_x() || size_y != other.get_size_y()) {
                 return false;
@@ -117,14 +107,15 @@ class matrix
                 return matrix(multiplyMatrices(data, other.get_data()));
             }
             else {
-                std::vector<std::vector<float>> ans; 
+                std::vector<std::vector<float>> ans(size_x, std::vector<float>(other.get_size_y())); 
                 for(int i = 0; i < size_x; ++i) {
                     for(int j = 0; j < size_y; ++j) {
-                        for(int k = 0; k < size_y; ++k) {
+                        for(int k = 0; k < other.get_size_y(); ++k) {
                             ans[i][k] += data[i][j] * other.get(j, k);
                         }
                     }
                 }
+                return matrix(ans);
             }
         }
 
