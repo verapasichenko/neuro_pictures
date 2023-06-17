@@ -119,6 +119,15 @@ class matrix
             }
         }
 
+        matrix operator *(int& num) const {
+            int n = num;
+            std::vector<std::vector<float>> ans(size_x, std::vector<float>(size_y));
+            for (int i = 0; i < size_x; ++i)
+                for (int j = 0; j < size_y; ++j)
+                    ans[i][j] = data[i][j] * n;
+            return matrix(ans) ;
+        }
+
 
     private:
         int size_x, size_y;
