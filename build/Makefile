@@ -240,29 +240,29 @@ nn/utility.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/utility.dir/build.make CMakeFiles/utility.dir/nn/utility.cpp.s
 .PHONY : nn/utility.cpp.s
 
-tests/tests.o: tests/tests.cpp.o
-.PHONY : tests/tests.o
+tests/tests_vera.o: tests/tests_vera.cpp.o
+.PHONY : tests/tests_vera.o
 
 # target to build an object file
-tests/tests.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests.cpp.o
-.PHONY : tests/tests.cpp.o
+tests/tests_vera.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests_vera.cpp.o
+.PHONY : tests/tests_vera.cpp.o
 
-tests/tests.i: tests/tests.cpp.i
-.PHONY : tests/tests.i
+tests/tests_vera.i: tests/tests_vera.cpp.i
+.PHONY : tests/tests_vera.i
 
 # target to preprocess a source file
-tests/tests.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests.cpp.i
-.PHONY : tests/tests.cpp.i
+tests/tests_vera.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests_vera.cpp.i
+.PHONY : tests/tests_vera.cpp.i
 
-tests/tests.s: tests/tests.cpp.s
-.PHONY : tests/tests.s
+tests/tests_vera.s: tests/tests_vera.cpp.s
+.PHONY : tests/tests_vera.s
 
 # target to generate assembly for a file
-tests/tests.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests.cpp.s
-.PHONY : tests/tests.cpp.s
+tests/tests_vera.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests_vera.cpp.s
+.PHONY : tests/tests_vera.cpp.s
 
 # Help Target
 help:
@@ -285,9 +285,9 @@ help:
 	@echo "... nn/utility.o"
 	@echo "... nn/utility.i"
 	@echo "... nn/utility.s"
-	@echo "... tests/tests.o"
-	@echo "... tests/tests.i"
-	@echo "... tests/tests.s"
+	@echo "... tests/tests_vera.o"
+	@echo "... tests/tests_vera.i"
+	@echo "... tests/tests_vera.s"
 .PHONY : help
 
 

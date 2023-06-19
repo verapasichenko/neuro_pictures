@@ -13,5 +13,5 @@ add_library(utility STATIC nn/utility.cpp)
 add_library(prc STATIC nn/perceptron.cpp)
 add_library(nn STATIC nn/network.cpp)
 
-add_executable(tests tests/tests.cpp)
+add_executable(tests tests/tests_vera.cpp)
 target_link_libraries(tests)

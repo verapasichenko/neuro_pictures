@@ -69,28 +69,28 @@ include CMakeFiles/tests.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/tests.dir/flags.make
 
-CMakeFiles/tests.dir/tests/tests.cpp.o: CMakeFiles/tests.dir/flags.make
-CMakeFiles/tests.dir/tests/tests.cpp.o: /Users/ep/Documents/GitHub/neuro_pictures/tests/tests.cpp
-CMakeFiles/tests.dir/tests/tests.cpp.o: CMakeFiles/tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tests.dir/tests/tests.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tests.dir/tests/tests.cpp.o -MF CMakeFiles/tests.dir/tests/tests.cpp.o.d -o CMakeFiles/tests.dir/tests/tests.cpp.o -c /Users/ep/Documents/GitHub/neuro_pictures/tests/tests.cpp
+CMakeFiles/tests.dir/tests/tests_vera.cpp.o: CMakeFiles/tests.dir/flags.make
+CMakeFiles/tests.dir/tests/tests_vera.cpp.o: /Users/ep/Documents/GitHub/neuro_pictures/tests/tests_vera.cpp
+CMakeFiles/tests.dir/tests/tests_vera.cpp.o: CMakeFiles/tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tests.dir/tests/tests_vera.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tests.dir/tests/tests_vera.cpp.o -MF CMakeFiles/tests.dir/tests/tests_vera.cpp.o.d -o CMakeFiles/tests.dir/tests/tests_vera.cpp.o -c /Users/ep/Documents/GitHub/neuro_pictures/tests/tests_vera.cpp
 
-CMakeFiles/tests.dir/tests/tests.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tests.dir/tests/tests.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ep/Documents/GitHub/neuro_pictures/tests/tests.cpp > CMakeFiles/tests.dir/tests/tests.cpp.i
+CMakeFiles/tests.dir/tests/tests_vera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tests.dir/tests/tests_vera.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ep/Documents/GitHub/neuro_pictures/tests/tests_vera.cpp > CMakeFiles/tests.dir/tests/tests_vera.cpp.i
 
-CMakeFiles/tests.dir/tests/tests.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tests.dir/tests/tests.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ep/Documents/GitHub/neuro_pictures/tests/tests.cpp -o CMakeFiles/tests.dir/tests/tests.cpp.s
+CMakeFiles/tests.dir/tests/tests_vera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tests.dir/tests/tests_vera.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ep/Documents/GitHub/neuro_pictures/tests/tests_vera.cpp -o CMakeFiles/tests.dir/tests/tests_vera.cpp.s
 
 # Object files for target tests
 tests_OBJECTS = \
-"CMakeFiles/tests.dir/tests/tests.cpp.o"
+"CMakeFiles/tests.dir/tests/tests_vera.cpp.o"
 
 # External object files for target tests
 tests_EXTERNAL_OBJECTS =
 
-tests: CMakeFiles/tests.dir/tests/tests.cpp.o
+tests: CMakeFiles/tests.dir/tests/tests_vera.cpp.o
 tests: CMakeFiles/tests.dir/build.make
 tests: CMakeFiles/tests.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ep/Documents/GitHub/neuro_pictures/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable tests"
