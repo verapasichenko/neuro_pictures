@@ -7,6 +7,9 @@ include_directories(./include)
 include_directories(./include/cuda/lib)
 include_directories(./include/cuda/include)
 include_directories(./lib)
+include_directories(/include)
+include_directories(/lib)
+include_directories(/bin)
 
 
 add_library(utility STATIC nn/utility.cpp)
