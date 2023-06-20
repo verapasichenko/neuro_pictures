@@ -1,0 +1,26 @@
+\doxysection{Color\+Generator Class Reference}
+\hypertarget{class_color_generator}{}\label{class_color_generator}\index{ColorGenerator@{ColorGenerator}}
+
+
+{\ttfamily \#include $<$drawer.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_color_generator_a804fa36a7cc84deaa7be882460ac1f20}\label{class_color_generator_a804fa36a7cc84deaa7be882460ac1f20} 
+cv\+::\+Scalar {\bfseries get\+Next\+Color} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Генератор цветов. Класс \doxylink{class_color_generator}{Color\+Generator} предоставляет функционал для генерации последовательности цветов. При каждом вызове метода get\+Next\+Color() возвращается следующий цвет из заранее заданного набора цветов. Приватные члены класса\+:
+\begin{DoxyItemize}
+\item colors\+: вектор, содержащий заранее заданные цвета.
+\item current\+Index\+: индекс текущего цвета в векторе colors. Публичные методы класса\+:
+\item Color\+Generator()\+: конструктор класса, инициализирует вектор colors и устанавливает начальное значение индекса current\+Index.
+\item get\+Next\+Color()\+: возвращает следующий цвет из вектора colors и обновляет значение индекса current\+Index. 
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+UI/drawer.\+h\end{DoxyCompactItemize}

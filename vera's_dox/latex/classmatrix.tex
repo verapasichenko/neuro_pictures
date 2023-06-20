@@ -1,0 +1,301 @@
+\doxysection{matrix Class Reference}
+\hypertarget{classmatrix}{}\label{classmatrix}\index{matrix@{matrix}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classmatrix_a788ba5476299a8046947e70616ae277b}\label{classmatrix_a788ba5476299a8046947e70616ae277b} 
+{\bfseries matrix} (std\+::vector$<$ std\+::vector$<$ float $>$ $>$ data\+\_\+)
+\item 
+int \mbox{\hyperlink{classmatrix_a592a02973f470589c255e1a2af4608cf}{get\+\_\+size\+\_\+x}} ()
+\item 
+int \mbox{\hyperlink{classmatrix_aa2c98840cc6268c1a105b0ebde8de84d}{get\+\_\+size\+\_\+y}} ()
+\item 
+std\+::vector$<$ std\+::vector$<$ float $>$ $>$ \mbox{\hyperlink{classmatrix_a04d9939524bf0c1529a7509158bb1155}{get\+\_\+data}} ()
+\item 
+float \mbox{\hyperlink{classmatrix_aa29d9b2d1e84b2be1d329d4fca1b0582}{get}} (int x, int y)
+\item 
+void \mbox{\hyperlink{classmatrix_adbdc971a58426833866a10202a9e57f7}{set}} (int x, int y, float val)
+\item 
+void \mbox{\hyperlink{classmatrix_af1ed6cbc3c00173893a8e5f2075b0fce}{add}} (int x, int y, float val)
+\item 
+void \mbox{\hyperlink{classmatrix_a59610fd7ec2b9f249a436dd6f22086fc}{set\+\_\+size}} (int x, int y, int value=0)
+\item 
+bool \mbox{\hyperlink{classmatrix_aeccf9ba8fc667fe7e09767efd4cdd3c2}{is\+Square}} () const
+\item 
+bool \mbox{\hyperlink{classmatrix_ae90ef092269eac56d133c214e2c2b1f9}{is\+Zero\+Matrix}} () const
+\item 
+bool \mbox{\hyperlink{classmatrix_a3edd13b1f197516a76bc52d5faae8416}{operator==}} (\mbox{\hyperlink{classmatrix}{matrix}} \&other) const
+\item 
+bool \mbox{\hyperlink{classmatrix_ad5d8276ea27af75ae63294b01a4771ed}{operator!=}} (\mbox{\hyperlink{classmatrix}{matrix}} \&other) const
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_a58367824c94a92fbb14110f30fd2cd15}{operator\texorpdfstring{$\ast$}{*}}} (\mbox{\hyperlink{classmatrix}{matrix}} \&other) const
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_a3b42a5381db76c3f8f602ad2af3e59d7}{operator+}} (\mbox{\hyperlink{classmatrix}{matrix}} \&other) const
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_accd121a2da98b70be02311cccfd145e6}{scalar}} (float n)
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_a78a96481108a3b831d37693450c1b2aa}{activate\+\_\+relu}} ()
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_a9959efe32a117e0267fee40ab71ddb32}{gradients}} ()
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_ac34dbd5b447a6d688baf9f6a65143d30}{transpose\+Matrix}} ()
+\item 
+\mbox{\hyperlink{classmatrix}{matrix}} \mbox{\hyperlink{classmatrix_a7efdad1f5f6284158a9b8060cef299fa}{calculate\+\_\+error}} (\mbox{\hyperlink{classmatrix}{matrix}} output\+\_\+res, \mbox{\hyperlink{classmatrix}{matrix}} result)
+\item 
+float \mbox{\hyperlink{classmatrix_aab35b131c14e1dd5d2c320cf134203b6}{sum}} ()
+\item 
+float \mbox{\hyperlink{classmatrix_a16bad91b0b86de2a7a8e32225ac8389d}{mean}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Класс матрицы. size\+\_\+x -\/ размер матрицы по x size\+\_\+y -\/ размер матрицы по y data -\/ данные, лежащие в матрице. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classmatrix_a78a96481108a3b831d37693450c1b2aa}\label{classmatrix_a78a96481108a3b831d37693450c1b2aa} 
+\index{matrix@{matrix}!activate\_relu@{activate\_relu}}
+\index{activate\_relu@{activate\_relu}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{activate\_relu()}{activate\_relu()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::activate\+\_\+relu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Активация. \begin{DoxyReturn}{Returns}
+new\+\_\+matrix -\/ матрица, полученная путем замены некоторых символов. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_af1ed6cbc3c00173893a8e5f2075b0fce}\label{classmatrix_af1ed6cbc3c00173893a8e5f2075b0fce} 
+\index{matrix@{matrix}!add@{add}}
+\index{add@{add}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily void matrix\+::add (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{float}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
++= к числу 
+\begin{DoxyParams}{Parameters}
+{\em x} & -\/ координата x значения \\
+\hline
+{\em y} & -\/ координата y значения \\
+\hline
+{\em val} & -\/ значение, которое добавить \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classmatrix_a7efdad1f5f6284158a9b8060cef299fa}\label{classmatrix_a7efdad1f5f6284158a9b8060cef299fa} 
+\index{matrix@{matrix}!calculate\_error@{calculate\_error}}
+\index{calculate\_error@{calculate\_error}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{calculate\_error()}{calculate\_error()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::calculate\+\_\+error (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmatrix}{matrix}}}]{output\+\_\+res,  }\item[{\mbox{\hyperlink{classmatrix}{matrix}}}]{result }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Находит ошибку между значениями векторов. 
+\begin{DoxyParams}{Parameters}
+{\em output\+\_\+res} & Выходное значение нейронной сети. \\
+\hline
+{\em result} & Ожидаемое(истинное) значение. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Ошибка. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_aa29d9b2d1e84b2be1d329d4fca1b0582}\label{classmatrix_aa29d9b2d1e84b2be1d329d4fca1b0582} 
+\index{matrix@{matrix}!get@{get}}
+\index{get@{get}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily float matrix\+::get (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+геттер числа из матрицы \begin{DoxyReturn}{Returns}
+data\mbox{[}x\mbox{]}\mbox{[}y\mbox{]} -\/ число на нужной позиции 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a04d9939524bf0c1529a7509158bb1155}\label{classmatrix_a04d9939524bf0c1529a7509158bb1155} 
+\index{matrix@{matrix}!get\_data@{get\_data}}
+\index{get\_data@{get\_data}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{get\_data()}{get\_data()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::vector$<$ float $>$ $>$ matrix\+::get\+\_\+data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+геттер данных \begin{DoxyReturn}{Returns}
+data информация по матрице 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a592a02973f470589c255e1a2af4608cf}\label{classmatrix_a592a02973f470589c255e1a2af4608cf} 
+\index{matrix@{matrix}!get\_size\_x@{get\_size\_x}}
+\index{get\_size\_x@{get\_size\_x}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{get\_size\_x()}{get\_size\_x()}}
+{\footnotesize\ttfamily int matrix\+::get\+\_\+size\+\_\+x (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+геттер размера \begin{DoxyReturn}{Returns}
+size\+\_\+x размер матрицы по x 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_aa2c98840cc6268c1a105b0ebde8de84d}\label{classmatrix_aa2c98840cc6268c1a105b0ebde8de84d} 
+\index{matrix@{matrix}!get\_size\_y@{get\_size\_y}}
+\index{get\_size\_y@{get\_size\_y}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{get\_size\_y()}{get\_size\_y()}}
+{\footnotesize\ttfamily int matrix\+::get\+\_\+size\+\_\+y (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+геттер размера \begin{DoxyReturn}{Returns}
+size\+\_\+y размер матрицы по y 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a9959efe32a117e0267fee40ab71ddb32}\label{classmatrix_a9959efe32a117e0267fee40ab71ddb32} 
+\index{matrix@{matrix}!gradients@{gradients}}
+\index{gradients@{gradients}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{gradients()}{gradients()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::gradients (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Градиент. \begin{DoxyReturn}{Returns}
+gradient -\/ матрица, полученная путем замены некоторых символов. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_aeccf9ba8fc667fe7e09767efd4cdd3c2}\label{classmatrix_aeccf9ba8fc667fe7e09767efd4cdd3c2} 
+\index{matrix@{matrix}!isSquare@{isSquare}}
+\index{isSquare@{isSquare}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{isSquare()}{isSquare()}}
+{\footnotesize\ttfamily bool matrix\+::is\+Square (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Проверка на квадратность матрицы. \begin{DoxyReturn}{Returns}
+равенство по длине и ширине. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_ae90ef092269eac56d133c214e2c2b1f9}\label{classmatrix_ae90ef092269eac56d133c214e2c2b1f9} 
+\index{matrix@{matrix}!isZeroMatrix@{isZeroMatrix}}
+\index{isZeroMatrix@{isZeroMatrix}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{isZeroMatrix()}{isZeroMatrix()}}
+{\footnotesize\ttfamily bool matrix\+::is\+Zero\+Matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Проверка на нулевность матрицы. \begin{DoxyReturn}{Returns}
+true, если матрица состоит из нулей. 
+
+false, если матрица не состоит из нулей. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a16bad91b0b86de2a7a8e32225ac8389d}\label{classmatrix_a16bad91b0b86de2a7a8e32225ac8389d} 
+\index{matrix@{matrix}!mean@{mean}}
+\index{mean@{mean}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{mean()}{mean()}}
+{\footnotesize\ttfamily float matrix\+::mean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Вычисление среднего значения из всех элементов матрицы. \begin{DoxyReturn}{Returns}
+Среднее значение из всех элементов матрицы. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_ad5d8276ea27af75ae63294b01a4771ed}\label{classmatrix_ad5d8276ea27af75ae63294b01a4771ed} 
+\index{matrix@{matrix}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily bool matrix\+::operator!= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmatrix}{matrix}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Перегруженный оператор \"{}не равно\"{} 
+\begin{DoxyParams}{Parameters}
+{\em matrix\&} & -\/ ссылка на объект matrix \\
+\hline
+{\em other} & -\/ другая матрица \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true, если матрицы не равны. 
+
+false, если матрицы равны. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a58367824c94a92fbb14110f30fd2cd15}\label{classmatrix_a58367824c94a92fbb14110f30fd2cd15} 
+\index{matrix@{matrix}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmatrix}{matrix}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Перегруженный оператор \"{}умножение\"{} 
+\begin{DoxyParams}{Parameters}
+{\em matrix\&} & -\/ ссылка на объект matrix \\
+\hline
+{\em other} & -\/ другая матрица \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ans -\/ матрица, полученная путем перемножения двух матриц. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a3b42a5381db76c3f8f602ad2af3e59d7}\label{classmatrix_a3b42a5381db76c3f8f602ad2af3e59d7} 
+\index{matrix@{matrix}!operator+@{operator+}}
+\index{operator+@{operator+}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::operator+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmatrix}{matrix}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Перегруженный оператор \"{}сложение\"{} 
+\begin{DoxyParams}{Parameters}
+{\em matrix\&} & -\/ ссылка на объект matrix \\
+\hline
+{\em other} & -\/ другая матрица \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ans -\/ матрица, полученная путем сложения двух матриц. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_a3edd13b1f197516a76bc52d5faae8416}\label{classmatrix_a3edd13b1f197516a76bc52d5faae8416} 
+\index{matrix@{matrix}!operator==@{operator==}}
+\index{operator==@{operator==}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool matrix\+::operator== (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmatrix}{matrix}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Перегруженный оператор \"{}равно\"{} 
+\begin{DoxyParams}{Parameters}
+{\em matrix\&} & -\/ ссылка на объект matrix \\
+\hline
+{\em other} & -\/ другая матрица \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true, если матрицы равны. 
+
+false, если матрицы не равны. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_accd121a2da98b70be02311cccfd145e6}\label{classmatrix_accd121a2da98b70be02311cccfd145e6} 
+\index{matrix@{matrix}!scalar@{scalar}}
+\index{scalar@{scalar}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{scalar()}{scalar()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::scalar (\begin{DoxyParamCaption}\item[{float}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Умножение матрицы на число. 
+\begin{DoxyParams}{Parameters}
+{\em n} & -\/ какое-\/либо число. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ans -\/ матрица, полученная путем умножения матрицы на число. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_adbdc971a58426833866a10202a9e57f7}\label{classmatrix_adbdc971a58426833866a10202a9e57f7} 
+\index{matrix@{matrix}!set@{set}}
+\index{set@{set}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{set()}{set()}}
+{\footnotesize\ttfamily void matrix\+::set (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{float}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+сеттер значения. 
+\begin{DoxyParams}{Parameters}
+{\em x} & -\/ координата x значения \\
+\hline
+{\em y} & -\/ координата y значения \\
+\hline
+{\em val} & -\/ значение, на которое заменить \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classmatrix_a59610fd7ec2b9f249a436dd6f22086fc}\label{classmatrix_a59610fd7ec2b9f249a436dd6f22086fc} 
+\index{matrix@{matrix}!set\_size@{set\_size}}
+\index{set\_size@{set\_size}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{set\_size()}{set\_size()}}
+{\footnotesize\ttfamily void matrix\+::set\+\_\+size (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{int}]{value = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+сеттер размера. 
+\begin{DoxyParams}{Parameters}
+{\em x} & -\/ размер по x \\
+\hline
+{\em y} & -\/ размер по y ВНИМАНИЕ\+: Удаляет исходную матрицу \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classmatrix_aab35b131c14e1dd5d2c320cf134203b6}\label{classmatrix_aab35b131c14e1dd5d2c320cf134203b6} 
+\index{matrix@{matrix}!sum@{sum}}
+\index{sum@{sum}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{sum()}{sum()}}
+{\footnotesize\ttfamily float matrix\+::sum (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Вычисление суммы всех элементов матрицы. \begin{DoxyReturn}{Returns}
+Сумма всех элементов. 
+\end{DoxyReturn}
+\Hypertarget{classmatrix_ac34dbd5b447a6d688baf9f6a65143d30}\label{classmatrix_ac34dbd5b447a6d688baf9f6a65143d30} 
+\index{matrix@{matrix}!transposeMatrix@{transposeMatrix}}
+\index{transposeMatrix@{transposeMatrix}!matrix@{matrix}}
+\doxysubsubsection{\texorpdfstring{transposeMatrix()}{transposeMatrix()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmatrix}{matrix}} matrix\+::transpose\+Matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Транспонирование матрицы. \begin{DoxyReturn}{Returns}
+transposed\+Matrix -\/ транспонированная матрица. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+nn/utility.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,153 @@
+\doxysection{drawer.\+h}
+\hypertarget{drawer_8h_source}{}\label{drawer_8h_source}\index{UI/drawer.h@{UI/drawer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <opencv2/opencv.hpp>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <stack>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keywordtype}{bool}\ drawing\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00007\ cv::Point\ prevPoint;}
+\DoxyCodeLine{00008\ cv::Mat\ canvas(400,\ 400,\ CV\_8UC3,\ cv::Scalar(255,\ 255,\ 255));}
+\DoxyCodeLine{00009\ std::stack<cv::Mat>\ undoStack;}
+\DoxyCodeLine{00010\ std::stack<cv::Mat>\ redoStack;}
+\DoxyCodeLine{00011\ \textcolor{keywordtype}{bool}\ ctrlPressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00012\ cv::Scalar\ currentColor(0,\ 0,\ 0);}
+\DoxyCodeLine{00013\ \textcolor{keywordtype}{int}\ line\_thickness\ =\ 3;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_color_generator}{ColorGenerator}}}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \ std::vector<cv::Scalar>\ colors;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ currentIndex;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{class_color_generator}{ColorGenerator}}()\ :\ currentIndex(0)}
+\DoxyCodeLine{00037\ \ \ \ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ colors\ =\ \{\ cv::Scalar(0,\ 0,\ 255),\ cv::Scalar(0,\ 255,\ 0),\ cv::Scalar(255,\ 0,\ 0),\ cv::Scalar(0,\ 0,\ 0)\ \};}
+\DoxyCodeLine{00039\ \ \ \ \ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ cv::Scalar\ getNextColor()}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ cv::Scalar\&\ color\ =\ colors[currentIndex];}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ currentIndex\ =\ (currentIndex\ +\ 1)\ \%\ colors.size();}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ color;}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_background_generator}{BackgroundGenerator}}}
+\DoxyCodeLine{00063\ \{}
+\DoxyCodeLine{00064\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00065\ \ \ \ \ std::vector<cv::Scalar>\ backgrounds;}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ currentIndex;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{class_background_generator}{BackgroundGenerator}}()\ :\ currentIndex(0)}
+\DoxyCodeLine{00070\ \ \ \ \ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ backgrounds\ =\ \{\ cv::Scalar(255,\ 255,\ 255),\ cv::Scalar(0,\ 0,\ 0),\ cv::Scalar(128,\ 128,\ 128)\ \};}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ cv::Scalar\ getNextBackground()}
+\DoxyCodeLine{00075\ \ \ \ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ cv::Scalar\&\ background\ =\ backgrounds[currentIndex];}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ currentIndex\ =\ (currentIndex\ +\ 1)\ \%\ backgrounds.size();}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ background;}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00094\ \textcolor{keywordtype}{void}\ onMouse(\textcolor{keywordtype}{int}\ event,\ \textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{void}*\ userdata)}
+\DoxyCodeLine{00095\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{if}\ (event\ ==\ cv::EVENT\_LBUTTONDOWN)}
+\DoxyCodeLine{00097\ \ \ \ \ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ drawing\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ prevPoint\ =\ cv::Point(x,\ y);}
+\DoxyCodeLine{00100\ \ \ \ \ \}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (event\ ==\ cv::EVENT\_LBUTTONUP)}
+\DoxyCodeLine{00102\ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ undoStack.push(canvas.clone());}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ redoStack\ =\ std::stack<cv::Mat>();}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ drawing\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (event\ ==\ cv::EVENT\_MOUSEMOVE)}
+\DoxyCodeLine{00108\ \ \ \ \ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (drawing)}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ cv::Point\ currentPoint(x,\ y);}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ cv::line(canvas,\ prevPoint,\ currentPoint,\ currentColor,\ line\_thickness);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ prevPoint\ =\ currentPoint;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ cv::imshow(\textcolor{stringliteral}{"{}Editor"{}},\ canvas);}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00126\ \textcolor{keywordtype}{void}\ undo()}
+\DoxyCodeLine{00127\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{if}\ (!undoStack.empty())}
+\DoxyCodeLine{00129\ \ \ \ \ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ redoStack.push(canvas.clone());}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ canvas\ =\ undoStack.top().clone();}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ undoStack.pop();}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ cv::imshow(\textcolor{stringliteral}{"{}Editor"{}},\ canvas);}
+\DoxyCodeLine{00134\ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00144\ \textcolor{keywordtype}{void}\ redo()}
+\DoxyCodeLine{00145\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordflow}{if}\ (!redoStack.empty())}
+\DoxyCodeLine{00147\ \ \ \ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ undoStack.push(canvas.clone());}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ canvas\ =\ redoStack.top().clone();}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ redoStack.pop();}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ cv::imshow(\textcolor{stringliteral}{"{}Editor"{}},\ canvas);}
+\DoxyCodeLine{00152\ \ \ \ \ \}}
+\DoxyCodeLine{00153\ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00163\ \textcolor{keywordtype}{void}\ changeColor(\mbox{\hyperlink{class_color_generator}{ColorGenerator}}\&\ colorGenerator)}
+\DoxyCodeLine{00164\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ currentColor\ =\ colorGenerator.getNextColor();}
+\DoxyCodeLine{00166\ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00177\ \textcolor{keywordtype}{void}\ changeBackground(\mbox{\hyperlink{class_background_generator}{BackgroundGenerator}}\&\ backgroundGenerator)}
+\DoxyCodeLine{00178\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ cv::Scalar\ backgroundColor\ =\ backgroundGenerator.getNextBackground();}
+\DoxyCodeLine{00180\ \ \ \ \ canvas.setTo(backgroundColor);}
+\DoxyCodeLine{00181\ \ \ \ \ cv::imshow(\textcolor{stringliteral}{"{}Editor"{}},\ canvas);}
+\DoxyCodeLine{00182\ \}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00198\ \textcolor{keywordtype}{void}\ onKeyPressed(\textcolor{keywordtype}{int}\ key,\ \mbox{\hyperlink{class_color_generator}{ColorGenerator}}\&\ colorGenerator,\ \mbox{\hyperlink{class_background_generator}{BackgroundGenerator}}\&\ backgroundGenerator)}
+\DoxyCodeLine{00199\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'c'})\ \textcolor{comment}{//\ Clear\ canvas}}
+\DoxyCodeLine{00201\ \ \ \ \ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ undoStack.push(canvas.clone());}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ redoStack\ =\ std::stack<cv::Mat>();}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ canvas\ =\ cv::Scalar(255,\ 255,\ 255);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ cv::imshow(\textcolor{stringliteral}{"{}Editor"{}},\ canvas);}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'z'}\ \&\&\ ctrlPressed)}
+\DoxyCodeLine{00208\ \ \ \ \ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ undo();}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'y'}\ \&\&\ ctrlPressed)}
+\DoxyCodeLine{00212\ \ \ \ \ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ redo();}
+\DoxyCodeLine{00214\ \ \ \ \ \}}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'r'})}
+\DoxyCodeLine{00216\ \ \ \ \ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ changeColor(colorGenerator);}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'b'})}
+\DoxyCodeLine{00220\ \ \ \ \ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ changeBackground(backgroundGenerator);}
+\DoxyCodeLine{00222\ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'+'}\ ||\ key\ ==\ \textcolor{charliteral}{'='})}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ line\_thickness++;}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (key\ ==\ \textcolor{charliteral}{'-\/'}\ ||\ key\ ==\ \textcolor{charliteral}{'\_'})}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ line\_thickness\ =\ std::max(1,\ line\_thickness\ -\/\ 1);}
+\DoxyCodeLine{00227\ \}}
+\DoxyCodeLine{00232\ \textcolor{keywordtype}{void}\ onCtrlPressed(\textcolor{keywordtype}{bool}\ pressed)}
+\DoxyCodeLine{00233\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ ctrlPressed\ =\ pressed;}
+\DoxyCodeLine{00235\ \}}
+
+\end{DoxyCode}
