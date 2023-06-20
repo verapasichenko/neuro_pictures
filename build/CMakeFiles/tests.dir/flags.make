@@ -4,7 +4,7 @@
 # compile CXX with /Library/Developer/CommandLineTools/usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/ep/Documents/GitHub/neuro_pictures/./include -I/Users/ep/Documents/GitHub/neuro_pictures/./include/cuda/lib -I/Users/ep/Documents/GitHub/neuro_pictures/./include/cuda/include -I/Users/ep/Documents/GitHub/neuro_pictures/./lib
+CXX_INCLUDES = -I/Users/ep/Documents/GitHub/neuro_pictures/./include -I/Users/ep/Documents/GitHub/neuro_pictures/./include/cuda/lib -I/Users/ep/Documents/GitHub/neuro_pictures/./include/cuda/include -I/Users/ep/Documents/GitHub/neuro_pictures/./lib -I/include -I/lib -I/bin
 
 CXX_FLAGS =  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.6 -std=gnu++17
 
