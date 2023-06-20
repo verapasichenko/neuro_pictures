@@ -1,14 +1,11 @@
-﻿//
-// Created by Идар on 27.05.2023.
-//
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <stack>
 #include <vector>
 
 bool drawing = false;
 cv::Point prevPoint;
-cv::Mat canvas(240, 240, CV_8UC3, cv::Scalar(255, 255, 255));
+cv::Mat canvas(400, 400, CV_8UC3, cv::Scalar(255, 255, 255));
 std::stack<cv::Mat> undoStack;
 std::stack<cv::Mat> redoStack;
 bool ctrlPressed = false;
@@ -29,7 +26,6 @@ int line_thickness = 3;
  * - getNextColor(): возвращает следующий цвет из вектора colors и обновляет значение
  *   индекса currentIndex.
  */
-
 class ColorGenerator
 {
 private:
@@ -41,6 +37,7 @@ public:
     {
         colors = { cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0), cv::Scalar(255, 0, 0), cv::Scalar(0, 0, 0) };
     }
+
     cv::Scalar getNextColor()
     {
         const cv::Scalar& color = colors[currentIndex];
@@ -49,6 +46,38 @@ public:
     }
 };
 
+/**
+ * Background generator.
+ * The BackgroundGenerator class provides functionality for generating and changing the
+ * background color of the canvas.
+ * Private class members:
+ * - backgrounds: a vector containing the predefined background colors.
+ * - currentIndex: the index of the current background color in the backgrounds vector.
+ * Public class methods:
+ * - BackgroundGenerator(): the class constructor initializes the backgrounds vector and sets
+ *   the initial value of the currentIndex.
+ * - getNextBackground(): returns the next background color from the backgrounds vector and updates
+ *   the currentIndex value.
+ */
+class BackgroundGenerator
+{
+private:
+    std::vector<cv::Scalar> backgrounds;
+    size_t currentIndex;
+
+public:
+    BackgroundGenerator() : currentIndex(0)
+    {
+        backgrounds = { cv::Scalar(255, 255, 255), cv::Scalar(0, 0, 0), cv::Scalar(128, 128, 128) };
+    }
+
+    cv::Scalar getNextBackground()
+    {
+        const cv::Scalar& background = backgrounds[currentIndex];
+        currentIndex = (currentIndex + 1) % backgrounds.size();
+        return background;
+    }
+};
 
 /**
  * Обработчик событий мыши.
@@ -105,7 +134,6 @@ void undo()
     }
 }
 
-
 /**
  * Восстановление последнего отмененного действия.
  * Функция redo() восстанавливает последнее отмененное действие из стека redoStack, если он не пуст.
@@ -138,6 +166,22 @@ void changeColor(ColorGenerator& colorGenerator)
 }
 
 /**
+ * Изменение цвета фона холста.  
+ *
+ * Функция changeBackground() изменяет цвет фона холста на
+ * получено из объекта backgroundGenerator.
+
+ *
+ * @param backgroundGenerator Объект BackgroundGenerator, используемый для создания следующего цвета фона.
+ */
+void changeBackground(BackgroundGenerator& backgroundGenerator)
+{
+    cv::Scalar backgroundColor = backgroundGenerator.getNextBackground();
+    canvas.setTo(backgroundColor);
+    cv::imshow("Editor", canvas);
+}
+
+/**
  * Обработчик нажатия клавиш.
  *
  * Функция `onKeyPressed()` обрабатывает нажатия клавиш и выполняет соответствующие действия.
@@ -151,7 +195,7 @@ void changeColor(ColorGenerator& colorGenerator)
  * @param key             Код нажатой клавиши.
  * @param colorGenerator  Объект ColorGenerator, используемый для изменения цвета рисования.
  */
-void onKeyPressed(int key, ColorGenerator& colorGenerator)
+void onKeyPressed(int key, ColorGenerator& colorGenerator, BackgroundGenerator& backgroundGenerator)
 {
     if (key == 'c') // Clear canvas
     {
@@ -172,12 +216,15 @@ void onKeyPressed(int key, ColorGenerator& colorGenerator)
     {
         changeColor(colorGenerator);
     }
+    else if (key == 'b')
+    {
+        changeBackground(backgroundGenerator);
+    }
     else if (key == '+' || key == '=')
         line_thickness++;
     else if (key == '-' || key == '_')
         line_thickness = std::max(1, line_thickness - 1);
 }
-
 /**
  * Установка состояния нажатия клавиши Ctrl.
  * @param pressed  Состояние клавиши Ctrl: true (нажата) или false (отпущена).

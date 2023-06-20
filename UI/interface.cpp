@@ -13,144 +13,63 @@
 #include <QtCore/QString>
 #include "dirent.h"
 #include "drawer.h"
-#include "header1.h"
 #include <network.h>
 
-std::string ConvertWideCharToUTF8(const wchar_t* wideCharString)
-{
-    int utf8Size = WideCharToMultiByte(CP_UTF8, 0, wideCharString, -1, NULL, 0, NULL, NULL);
-    std::vector<char> utf8Buffer(utf8Size);
-    WideCharToMultiByte(CP_UTF8, 0, wideCharString, -1, utf8Buffer.data(), utf8Size, NULL, NULL);
-    return std::string(utf8Buffer.data());
-}
+void displayText(const std::string& text, const cv::Scalar& textColor, const cv::Scalar& bgColor,
+                 const std::string& fontName, int fontSize, bool bold, bool italic, bool underline,
+                 bool strikethrough, bool shadow) {
+    cv::Mat image(200, 400, CV_8UC3, bgColor);
 
-// Функция загрузки файла изображения
-std::string loadImage(const std::string& filename) {
-    std::ifstream file(filename, std::ios::binary);
-    if (file.is_open()) {
-        // Получаем размер файла
-        file.seekg(0, std::ios::end);
-        std::streampos fileSize = file.tellg();
-        file.seekg(0, std::ios::beg);
-
-        // Создаем буфер для хранения данных файла
-        std::string imageData;
-        imageData.resize(fileSize);
-
-        // Читаем данные файла в буфер
-        file.read(&imageData[0], fileSize);
-
-        // Закрываем файл
-        file.close();
-
-        return imageData;
+    int baseline = 0;
+    int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+    if (fontName == "Arial") {
+        fontFace = cv::FONT_HERSHEY_PLAIN;
     }
-    else {
-        throw std::runtime_error("Failed to open file: " + filename);
-    }
-}
-
-// Функция сохранения файла изображения
-void saveImage(const std::string& filename, const std::string& imageData) {
-    std::ofstream file(filename, std::ios::binary);
-    if (file.is_open()) {
-        // Сохраняем данные изображения в файл
-        file.write(imageData.data(), imageData.size());
-
-        // Закрываем файл
-        file.close();
-    }
-    else {
-        throw std::runtime_error("Failed to save file: " + filename);
-    }
-}
-
-// Функция для конфигурации размера окна
-void configureWindow(int width, int height, const std::string& windowName, int flags = cv::WINDOW_NORMAL) {
-    cv::Mat image = cv::Mat::zeros(height, width, CV_8UC3);
-    cv::rectangle(image, cv::Rect(0, 0, width, height), cv::Scalar(255, 255, 255), cv::FILLED);
-
-    cv::namedWindow(windowName, flags);
-    cv::imshow(windowName, image);
-    cv::waitKey(0);
-    cv::destroyWindow(windowName);
-}
-
-// Функция отрисовки окна (пример)
-void drawWindow(int width, int height) {
-    cv::Mat image = cv::Mat::zeros(height, width, CV_8UC3);
-    cv::putText(image, "Drawing window", cv::Point(10, height / 2),
-        cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
-
-    cv::namedWindow("Window", cv::WINDOW_NORMAL);
-    cv::imshow("Window", image);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-}
-
-// Функция для вывода сообщения
-void displayMessage(const std::string& message) {
-    cv::Mat image = cv::Mat::zeros(200, 600, CV_8UC3);
-    cv::putText(image, message, cv::Point(10, 100),
-        cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
-
-    cv::namedWindow("Message", cv::WINDOW_NORMAL);
-    cv::imshow("Message", image);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-}
-
-// Функция для загрузки окна
-void loadWindow(const std::string& windowName) {
-    cv::namedWindow(windowName, cv::WINDOW_NORMAL);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-}
-
-// Функция для выгрузки окна
-void unloadWindow(const std::string& windowName) {
-    cv::destroyWindow(windowName);
-}
-
-// Функция для конфигурации окна с использованием имени окна
-void configureWindowByName(const std::string& windowName, int width, int height, int flags = cv::WINDOW_NORMAL) {
-    cv::Mat image = cv::Mat::zeros(height, width, CV_8UC3);
-    cv::rectangle(image, cv::Rect(0, 0, width, height), cv::Scalar(255, 255, 255), cv::FILLED);
-
-    cv::namedWindow(windowName, flags);
-    cv::imshow(windowName, image);
-    cv::waitKey(0);
-    cv::destroyWindow(windowName);
-}
-
-// Функция для проверки, является ли файл изображением
-bool isImageFile(const std::string& filename) {
-    std::string extension = filename.substr(filename.find_last_of(".") + 1);
-    return (extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "bmp");
-}
-
-
-// Функция выбора папки в диалоговом окне
-std::string selectFolder(int argc, char *argv[]) {
-    QApplication app(argc, argv);  // Создаем экземпляр QApplication
-
-    QFileDialog dialog;  // Создаем диалоговое окно
-    dialog.setFileMode(QFileDialog::Directory);  // Устанавливаем режим выбора папки
-    dialog.setOption(QFileDialog::ShowDirsOnly);  // Показывать только папки
-    // Показываем диалоговое окно и ждем, пока пользователь выберет папку
-    if (dialog.exec()) {
-        // Получаем выбранную папку
-        QStringList selectedFolders = dialog.selectedFiles();
-        QString folderPath = selectedFolders.at(0);
-
-        // Преобразуем путь в строку типа std::string и возвращаем
-        return folderPath.toStdString();
+    else if (fontName == "Times New Roman") {
+        fontFace = cv::FONT_HERSHEY_SIMPLEX;
     }
 
-    // Если пользователь не выбрал папку, возвращаем пустую строку
-    return "";
+    int fontStyle = cv::FONT_HERSHEY_SIMPLEX;
+    if (bold) {
+        fontStyle |= cv::FONT_HERSHEY_SIMPLEX;
+    }
+    if (italic) {
+        fontStyle |= cv::FONT_HERSHEY_SIMPLEX;
+    }
+    if (underline) {
+        cv::putText(image, text, cv::Point(10, 200), fontFace, fontSize, cv::Scalar(0, 0, 0), 2, cv::LINE_AA);
+    }
+    if (strikethrough) {
+        cv::putText(image, text, cv::Point(10, 250), fontFace, fontSize, cv::Scalar(0, 0, 0), 2, cv::LINE_AA);
+    }
+
+    if (shadow) {
+        cv::putText(image, text, cv::Point(11, 200), fontFace, fontSize, cv::Scalar(0, 0, 0), 2, cv::LINE_AA);
+    }
+
+    cv::Size textSize = cv::getTextSize(text, fontFace, fontSize, 2, &baseline);
+
+    cv::Point textOrg((image.cols - textSize.width) / 2, (image.rows + textSize.height) / 2);
+
+    cv::putText(image, text, textOrg, fontFace, fontSize, textColor, 2, fontStyle);
+
+    cv::namedWindow("Text Display", cv::WINDOW_NORMAL);
+    cv::imshow("Text Display", image);
+
+    cv::waitKey(0);
+    cv::destroyWindow("Text Display");
 }
 
+
+/**
+ * Измените размер изображения на холсте до указанного размера.
+ *
+ * Функция resizeCanvas() изменяет размер входного изображения canvas до указанного размера с помощью билинейной интерполяции.
+ * Измененное изображение canvas возвращается как новый объект cv::Mat.
+ *
+ * @param canvas Входное изображение canvas, размер которого необходимо изменить.
+ * @return Изображение на холсте с измененным размером.
+ */
 cv::Mat resizeCanvas(const cv::Mat& canvas)
 {
     cv::Mat resizedCanvas;
@@ -158,11 +77,14 @@ cv::Mat resizeCanvas(const cv::Mat& canvas)
     return resizedCanvas;
 }
 
+
 int main(int argc, char* argv[]) {
     cv::namedWindow("Editor");
     cv::setMouseCallback("Editor", onMouse);
 
     ColorGenerator colorGenerator;
+    BackgroundGenerator backgroundGenerator;
+
 
     while (true)
     {
@@ -181,16 +103,31 @@ int main(int argc, char* argv[]) {
         }
         else
         {
-            onKeyPressed(key, colorGenerator);
+            onKeyPressed(key, colorGenerator, backgroundGenerator);
         }
     }
     canvas = resizeCanvas(canvas);
     NN recognizer(3, { 500, 20, 10 }, 28 * 28);
     matrix m;
     m.setFromCvMat(canvas);
-    recognizer.load("networks.txt");
+    std::string filename = "D:/projects/interface/network.txt";
+    recognizer.load(filename);
     int ans = recognizer.recognize(m);
     cv::destroyAllWindows();
     std::cout << "You drew: " << ans << std::endl;
+
+    std::string text = "You drew " + std::to_string(ans);
+    cv::Scalar textColor(0, 0, 0);
+    cv::Scalar bgColor(255, 255, 255);
+
+    std::string fontName = "Arial";
+    int fontSize = 3;
+    bool bold = false;
+    bool italic = false;
+    bool underline = false;
+    bool strikethrough = false;
+    bool shadow = false;
+
+    displayText(text, textColor, bgColor, fontName, fontSize, bold, italic, underline, strikethrough, shadow);
     return 0;
 }
