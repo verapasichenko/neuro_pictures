@@ -9,7 +9,7 @@
 class matrix
 {
 public:
-    matrix()
+    matrix() //rjycnhernjh d gecnsvb lfyysvb
     {
         data = std::vector<std::vector<float>>(0);
         size_x = 0;

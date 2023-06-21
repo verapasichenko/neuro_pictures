@@ -1,30 +1,23 @@
-﻿#include <stdio.h>
-#include <opencv2/opencv.hpp>
+﻿#include <opencv2/opencv.hpp>
 #include <stack>
 #include <vector>
+#include <cmath>
+
 
 bool drawing = false;
 cv::Point prevPoint;
-cv::Mat canvas(400, 400, CV_8UC3, cv::Scalar(255, 255, 255));
+cv::Mat canvas(400, 400, CV_8UC4, cv::Scalar(255, 255, 255, 255));
 std::stack<cv::Mat> undoStack;
 std::stack<cv::Mat> redoStack;
 bool ctrlPressed = false;
-cv::Scalar currentColor(0, 0, 0);
-int line_thickness = 3;
+cv::Scalar currentColor(0, 0, 0, 255);
+int lineThickness = 3;
+int pencilAlpha = 255;
 
 /**
- * Генератор цветов.
- * Класс ColorGenerator предоставляет функционал для генерации последовательности цветов.
- * При каждом вызове метода getNextColor() возвращается следующий цвет из заранее заданного
- * набора цветов.
- * Приватные члены класса:
- * - colors: вектор, содержащий заранее заданные цвета.
- * - currentIndex: индекс текущего цвета в векторе colors.
- * Публичные методы класса:
- * - ColorGenerator(): конструктор класса, инициализирует вектор colors и устанавливает
- *   начальное значение индекса currentIndex.
- * - getNextColor(): возвращает следующий цвет из вектора colors и обновляет значение
- *   индекса currentIndex.
+ * @class ColorGenerator
+ *
+ * @brief Генератор цветов.
  */
 class ColorGenerator
 {
@@ -33,11 +26,13 @@ private:
     size_t currentIndex;
 
 public:
+    /**
+    * @brief Конструктор класса ColorGenerator.
+    */
     ColorGenerator() : currentIndex(0)
     {
         colors = { cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0), cv::Scalar(255, 0, 0), cv::Scalar(0, 0, 0) };
     }
-
     cv::Scalar getNextColor()
     {
         const cv::Scalar& color = colors[currentIndex];
@@ -46,83 +41,253 @@ public:
     }
 };
 
-/**
- * Background generator.
- * The BackgroundGenerator class provides functionality for generating and changing the
- * background color of the canvas.
- * Private class members:
- * - backgrounds: a vector containing the predefined background colors.
- * - currentIndex: the index of the current background color in the backgrounds vector.
- * Public class methods:
- * - BackgroundGenerator(): the class constructor initializes the backgrounds vector and sets
- *   the initial value of the currentIndex.
- * - getNextBackground(): returns the next background color from the backgrounds vector and updates
- *   the currentIndex value.
- */
-class BackgroundGenerator
+enum class Tool
 {
-private:
-    std::vector<cv::Scalar> backgrounds;
-    size_t currentIndex;
-
-public:
-    BackgroundGenerator() : currentIndex(0)
-    {
-        backgrounds = { cv::Scalar(255, 255, 255), cv::Scalar(0, 0, 0), cv::Scalar(128, 128, 128) };
-    }
-
-    cv::Scalar getNextBackground()
-    {
-        const cv::Scalar& background = backgrounds[currentIndex];
-        currentIndex = (currentIndex + 1) % backgrounds.size();
-        return background;
-    }
+    Pencil,
+    Line,
+    Eraser,
+    WaveLine,
+    Circle,
+    Triangle,
+    Rectangle,
 };
 
+Tool currentTool = Tool::Pencil;
+Tool previousTool = Tool::Pencil;
+cv::Mat copiedRegion;
+cv::Point startPoint;
 /**
- * Обработчик событий мыши.
+ * @brief Изменяет толщину линии.
  *
- * Обрабатывает нажатие и отпускание левой кнопки мыши,
- * а также перемещение мыши.
- *
- * @param event    Тип события мыши.
- * @param x        Координата X точки события.
- * @param y        Координата Y точки события.
- * @param          Дополнительные параметры (не используются).
- * @param userdata Данные пользователя (не используются).
+ * @param thickness     Новая толщина линии.
  */
-void onMouse(int event, int x, int y, int, void* userdata)
+void changeLineThickness(int thickness)
 {
-    if (event == cv::EVENT_LBUTTONDOWN)
-    {
-        drawing = true;
-        prevPoint = cv::Point(x, y);
-    }
-    else if (event == cv::EVENT_LBUTTONUP)
+    lineThickness = std::max(1, thickness);
+}
+/**
+ * @brief Копирует содержимое холста.
+ */
+void copyCanvas()
+{
+    copiedRegion = canvas.clone();
+}
+/**
+ * @brief Вставляет скопированное содержимое на холст.
+ */
+void pasteCanvas()
+{
+    if (!copiedRegion.empty())
     {
         undoStack.push(canvas.clone());
         redoStack = std::stack<cv::Mat>();
-        drawing = false;
+        cv::Rect roi(cv::Point(0, 0), copiedRegion.size());
+        copiedRegion.copyTo(canvas(roi));
+        cv::imshow("Editor", canvas);
+    }
+}
+/**
+ * @brief Отражает холст по горизонтали.
+ */
+void flipCanvas()
+{
+    cv::flip(canvas, canvas, 1);
+    cv::imshow("Editor", canvas);
+}
+
+/**
+ * @brief Рисует прямоугольник на холсте.
+ *
+ * @param x         Координата X левого верхнего угла прямоугольника.
+ * @param y         Координата Y левого верхнего угла прямоугольника.
+ * @param width     Ширина прямоугольника.
+ * @param height    Высота прямоугольника.
+ */
+void drawRectangle(int x, int y, int width, int height)
+{
+    cv::rectangle(canvas, cv::Point(x, y), cv::Point(x + width, y + height), currentColor, lineThickness);
+    cv::imshow("Editor", canvas);
+}
+/**
+ * @brief Рисует волнистую линию на холсте.
+ *
+ * @param x1    Координата X начальной точки линии.
+ * @param y1    Координата Y начальной точки линии.
+ * @param x2    Координата X конечной точки линии.
+ * @param y2    Координата Y конечной точки линии.
+ */
+void drawWaveLine(int x1, int y1, int x2, int y2)
+{
+    const float waveAmplitude = 10.0f;
+    const float waveFrequency = 0.1f;
+
+    float length = cv::norm(cv::Point(x2 - x1, y2 - y1));
+    int numSegments = static_cast<int>(length);
+
+    cv::Point prevPoint(x1, y1);
+
+    for (int i = 1; i <= numSegments; ++i)
+    {
+        float t = static_cast<float>(i) / numSegments;
+        float displacement = waveAmplitude * std::sin(2 * CV_PI * waveFrequency * t);
+
+        int x = static_cast<int>(x1 + t * (x2 - x1));
+        int y = static_cast<int>(y1 + t * (y2 - y1) + displacement);
+
+        cv::Scalar waveColor = cv::Scalar(currentColor[0], currentColor[1], currentColor[2], pencilAlpha);
+        cv::line(canvas, prevPoint, cv::Point(x, y), waveColor, lineThickness);
+        prevPoint = cv::Point(x, y);
+    }
+
+    cv::imshow("Editor", canvas);
+}
+/**
+ • @brief Рисует окружность на холсте.
+ •
+ • @param x Координата X центра окружности.
+ • @param y Координата Y центра окружности.
+ • @param radius Радиус окружности.
+ • */
+
+void drawCircle(int x, int y, int radius)
+{
+    cv::Scalar circleColor = cv::Scalar(currentColor[0], currentColor[1], currentColor[2], pencilAlpha);
+    cv::circle(canvas, cv::Point(x, y), radius, circleColor, lineThickness);
+    cv::imshow("Editor", canvas);
+}
+/**
+ • @brief Рисует треугольник на холсте.
+ •
+ • @param x Координата X верхней вершины треугольника.
+ • @param y Координата Y верхней вершины треугольника.
+ • @param sideLength Длина стороны треугольника.
+ • */
+
+void drawTriangle(int x, int y, int sideLength)
+{
+    const float sqrt3 = std::sqrt(3);
+
+    cv::Point p1(x, y - sideLength / (2 * sqrt3));
+    cv::Point p2(x - sideLength / 2, y + sideLength / (2 * sqrt3));
+    cv::Point p3(x + sideLength / 2, y + sideLength / (2 * sqrt3));
+
+    cv::line(canvas, p1, p2, currentColor, lineThickness);
+    cv::line(canvas, p2, p3, currentColor, lineThickness);
+    cv::line(canvas, p3, p1, currentColor, lineThickness);
+
+    cv::imshow("Editor", canvas);
+}
+/**
+ • @brief Обработчик событий мыши.
+ •
+ • @param event Тип события.
+ • @param x Координата X курсора мыши.
+ • @param y Координата Y курсора мыши.
+ • @param Дополнительные параметры.
+ • @param Дополнительные данные.
+ • */
+
+void onMouse(int event, int x, int y, int, void*)
+{
+    if (event == cv::EVENT_LBUTTONDOWN)
+    {
+        if (currentTool == Tool::Pencil || currentTool == Tool::Eraser)
+        {
+            drawing = true;
+            prevPoint = cv::Point(x, y);
+        }
+        else if (currentTool == Tool::Line)
+        {
+            startPoint = cv::Point(x, y);
+        }
+        else if (currentTool == Tool::WaveLine)
+        {
+            drawing = true;
+            prevPoint = cv::Point(x, y);
+        }
+        else if (currentTool == Tool::Rectangle)
+        {
+            startPoint = cv::Point(x, y);
+        }
+        else if (currentTool == Tool::Circle)
+        {
+            startPoint = cv::Point(x, y);
+        }
+        else if (currentTool == Tool::Triangle)
+        {
+            startPoint = cv::Point(x, y);
+        }
+    }
+    else if (event == cv::EVENT_LBUTTONUP)
+    {
+        if (currentTool == Tool::Pencil || currentTool == Tool::Eraser)
+        {
+            undoStack.push(canvas.clone());
+            redoStack = std::stack<cv::Mat>();
+            drawing = false;
+        }
+        else if (currentTool == Tool::Line)
+        {
+            cv::line(canvas, startPoint, cv::Point(x, y), currentColor, lineThickness);
+            cv::imshow("Editor", canvas);
+        }
+        else if (currentTool == Tool::WaveLine)
+        {
+            drawing = false;
+            drawWaveLine(startPoint.x, startPoint.y, x, y);
+        }
+        else if (currentTool == Tool::Rectangle)
+        {
+            int width = x - startPoint.x;
+            int height = y - startPoint.y;
+            drawRectangle(startPoint.x, startPoint.y, width, height);
+        }
+        else if (currentTool == Tool::Circle)
+        {
+            int radius = cv::norm(startPoint - cv::Point(x, y));
+            drawCircle(startPoint.x, startPoint.y, radius);
+        }
+        else if (currentTool == Tool::Triangle)
+        {
+            int sideLength = cv::norm(startPoint - cv::Point(x, y));
+            drawTriangle(startPoint.x, startPoint.y, sideLength);
+        }
     }
     else if (event == cv::EVENT_MOUSEMOVE)
     {
         if (drawing)
         {
             cv::Point currentPoint(x, y);
-            cv::line(canvas, prevPoint, currentPoint, currentColor, line_thickness);
-            prevPoint = currentPoint;
-            cv::imshow("Editor", canvas);
+            if (currentTool == Tool::Pencil)
+            {
+                cv::Scalar pencilColor = cv::Scalar(currentColor[0], currentColor[1], currentColor[2], pencilAlpha);
+                cv::line(canvas, prevPoint, currentPoint, pencilColor, lineThickness);
+                prevPoint = currentPoint;
+                cv::imshow("Editor", canvas);
+            }
+            else if (currentTool == Tool::Eraser)
+            {
+                cv::line(canvas, prevPoint, currentPoint, cv::Scalar(255, 255, 255, 0), lineThickness);
+                prevPoint = currentPoint;
+                cv::imshow("Editor", canvas);
+            }
+            else if (currentTool == Tool::WaveLine)
+            {
+                drawWaveLine(prevPoint.x, prevPoint.y, currentPoint.x, currentPoint.y);
+                prevPoint = currentPoint;
+            }
         }
     }
 }
 
-/**
- * Отменяет последнее действие на холсте.
- * Если стек отмены (`undoStack`) не пустой, то текущее состояние холста клонируется
- * и добавляется в стек повтора (`redoStack`). Затем верхний элемент из стека отмены
- * извлекается и устанавливается в качестве нового состояния холста. Обновленный холст
- * отображается в окне редактора (`"Editor"`).
- */
+/**@brief Отменяет последнее действие на холсте.
+•
+• Если стек отмены (undoStack) не пустой, извлекает последний сохраненный снимок холста из стека отмены,
+
+• помещает текущий снимок холста в стек повтора (redoStack), затем восстанавливает холст из последнего
+• сохраненного снимка, и отображает его в окне редактора.
+• */
+
 void undo()
 {
     if (!undoStack.empty())
@@ -133,14 +298,14 @@ void undo()
         cv::imshow("Editor", canvas);
     }
 }
-
 /**
- * Восстановление последнего отмененного действия.
- * Функция redo() восстанавливает последнее отмененное действие из стека redoStack, если он не пуст.
- * Состояние холста сохраняется в стеке undoStack, затем извлекается последнее сохраненное состояние
- * холста из redoStack, присваивается переменной canvas и удаляется из стека redoStack.
- * Обновленное состояние холста отображается в окне "Editor".
- */
+ • @brief Повторяет отмененное действие на холсте.
+ •
+ • Если стек повтора (redoStack) не пустой, извлекает последний сохраненный снимок холста из стека повтора,
+ • помещает текущий снимок холста в стек отмены (undoStack), затем восстанавливает холст из последнего
+ • сохраненного снимка, и отображает его в окне редактора.
+ • */
+
 void redo()
 {
     if (!redoStack.empty())
@@ -151,51 +316,33 @@ void redo()
         cv::imshow("Editor", canvas);
     }
 }
+/** @brief Изменяет текущий цвет для рисования.
+•
+• @param colorGenerator Генератор цветов.
+• */
 
-/**
- * Изменение текущего цвета рисования.
- *
- * Функция changeColor() изменяет текущий цвет рисования на следующий цвет, полученный
- * из объекта colorGenerator.
- *
- * @param colorGenerator Объект ColorGenerator, используемый для генерации следующего цвета.
- */
 void changeColor(ColorGenerator& colorGenerator)
 {
     currentColor = colorGenerator.getNextColor();
 }
-
 /**
- * Изменение цвета фона холста.  
- *
- * Функция changeBackground() изменяет цвет фона холста на
- * получено из объекта backgroundGenerator.
-
- *
- * @param backgroundGenerator Объект BackgroundGenerator, используемый для создания следующего цвета фона.
- */
-void changeBackground(BackgroundGenerator& backgroundGenerator)
+ • @brief Изменяет текущий инструмент рисования.
+ •
+ • @param tool Новый инструмент рисования.
+ • */
+void changeTool(Tool tool)
 {
-    cv::Scalar backgroundColor = backgroundGenerator.getNextBackground();
-    canvas.setTo(backgroundColor);
-    cv::imshow("Editor", canvas);
+    previousTool = currentTool;
+    currentTool = tool;
 }
-
 /**
- * Обработчик нажатия клавиш.
- *
- * Функция `onKeyPressed()` обрабатывает нажатия клавиш и выполняет соответствующие действия.
- * - 'c': Очищает холст. Текущее состояние холста клонируется и добавляется в стек отмены (`undoStack`).
- *        Стек повтора (`redoStack`) очищается.
- * - 'z' + Ctrl: Вызывает функцию `undo()`
- * - 'y' + Ctrl: Вызывает функцию `redo()`
- * - 'r': Вызывает функцию `changeColor()`,
- * - '+' или '=': Увеличивает толщину линии на единицу.
- * - '-' или '_': Уменьшает толщину линии на единицу, но не менее 1.
- * @param key             Код нажатой клавиши.
- * @param colorGenerator  Объект ColorGenerator, используемый для изменения цвета рисования.
- */
-void onKeyPressed(int key, ColorGenerator& colorGenerator, BackgroundGenerator& backgroundGenerator)
+ • @brief Обработчик события нажатия клавиши.
+ •
+ • @param key Код нажатой клавиши.
+ • @param colorGenerator Генератор цветов.
+ • */
+
+void onKeyPressed(int key, ColorGenerator& colorGenerator)
 {
     if (key == 'c') // Clear canvas
     {
@@ -216,20 +363,87 @@ void onKeyPressed(int key, ColorGenerator& colorGenerator, BackgroundGenerator& 
     {
         changeColor(colorGenerator);
     }
-    else if (key == 'b')
+    else if (key == '+')
     {
-        changeBackground(backgroundGenerator);
+        changeLineThickness(lineThickness + 1);
     }
-    else if (key == '+' || key == '=')
-        line_thickness++;
-    else if (key == '-' || key == '_')
-        line_thickness = std::max(1, line_thickness - 1);
+    else if (key == '-')
+    {
+        changeLineThickness(std::max(1, lineThickness - 1));
+    }
+    else if (key == 'x')
+    {
+        copyCanvas();
+    }
+    else if (key == 'v')
+    {
+        pasteCanvas();
+    }
+    else if (key == 'f')
+    {
+        flipCanvas();
+    }
+    else if (key == 'g')
+    {
+        changeTool(Tool::Line);
+    }
+    else if (key == 'e')
+    {
+        if (currentTool == Tool::Eraser)
+        {
+            changeTool(previousTool);
+        }
+        else
+        {
+            changeTool(Tool::Eraser);
+        }
+    }
+    else if (key == 'p')
+    {
+        changeTool(Tool::Pencil);
+    }
+    else if (key == 'w')
+    {
+        changeTool(Tool::WaveLine);
+    }
+    else if (key == 'o')
+    {
+
+        drawCircle(200, 200, 50); // Пример координат и радиуса;
+    }
+    else if (key == 't')
+    {
+
+        drawTriangle(100, 100, 50); // Пример координат и длины сторон;
+
+    }
+
+    else if (key == 'i')
+    {
+        static bool showWindow = false;
+        showWindow = !showWindow;
+        if (showWindow)
+        {
+            cv::namedWindow("Info");
+            cv::moveWindow("Info", 500, 200);
+            cv::putText(canvas, "привет!" , cv::Point(10, 50), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2);
+            cv::imshow("Editor", canvas);
+        }
+        else
+        {
+            cv::destroyWindow("Info");
+        }
+    }
 }
 /**
- * Установка состояния нажатия клавиши Ctrl.
- * @param pressed  Состояние клавиши Ctrl: true (нажата) или false (отпущена).
- */
+  @brief Обработчик события нажатия/отпускания клавиши Ctrl.
+
+  @param pressed Флаг, указывающий, нажата ли клавиша Ctrl (true) или отпущена (false).
+  */
+
 void onCtrlPressed(bool pressed)
 {
     ctrlPressed = pressed;
 }
+
+
